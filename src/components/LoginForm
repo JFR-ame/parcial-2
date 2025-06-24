@@ -1,0 +1,113 @@
+"use client"
+
+import { useState } from "react"
+import LanguageSelector from "./LanguageSelector"
+
+const LoginForm = ({ onLogin, language, onLanguageChange, t }) => {
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    setError("")
+
+    if (!username.trim() || !password.trim()) {
+      setError(t("fillAllFields"))
+      return
+    }
+
+    const success = onLogin(username, password)
+    if (!success) {
+      setError(t("invalidCredentials"))
+    }
+  }
+
+  const handleCancel = () => {
+    setUsername("")
+    setPassword("")
+    setError("")
+  }
+
+  return (
+    <div className="login-container">
+      <div className="container-fluid">
+        <div className="row justify-content-center">
+          <div className="col-12">
+            <div className="login-header">
+              <h1 className="text-center mb-4">Adopta un Robot con Robot Lovers!</h1>
+              <div className="language-selector-login">
+                <LanguageSelector currentLanguage={language} onLanguageChange={onLanguageChange} />
+              </div>
+            </div>
+
+            <div className="banner-container-login">
+              <img src="/robots-banner.png" alt="Robots Banner" className="banner-image-login" />
+            </div>
+
+            <div className="row justify-content-center">
+              <div className="col-md-6 col-lg-4">
+                <div className="login-form-container">
+                  <h2 className="text-center mb-4">{t("login")}</h2>
+
+                  {error && <div className="alert alert-danger text-center">{error}</div>}
+
+                  <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                      <label htmlFor="username" className="form-label">
+                        {t("username")}
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control login-input"
+                        id="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder={t("enterUsername")}
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label htmlFor="password" className="form-label">
+                        {t("password")}
+                      </label>
+                      <input
+                        type="password"
+                        className="form-control login-input"
+                        id="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder={t("enterPassword")}
+                      />
+                    </div>
+
+                    <div className="row">
+                      <div className="col-6">
+                        <button type="submit" className="btn btn-primary w-100 login-btn-primary">
+                          {t("enter")}
+                        </button>
+                      </div>
+                      <div className="col-6">
+                        <button type="button" className="btn btn-danger w-100 login-btn-danger" onClick={handleCancel}>
+                          {t("cancel")}
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div className="login-footer">
+              <p className="text-center text-muted">
+                Contact us: +57 3102105253 - info@robot-lovers.com - @robot-lovers
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default LoginForm
